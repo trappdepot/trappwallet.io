@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Risk Disclosure — TrappWallet</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0b0b0f;
+      color: #c0c0e0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.7;
+      padding: 0 16px 80px;
+    }
+
+    .header {
+      background: #0f0f16;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      font-size: 18px;
+      font-weight: 800;
+      color: #f0f0ff;
+      text-decoration: none;
+      letter-spacing: 0.3px;
+    }
+
+    .logo span { color: #19FB9B; }
+
+    .nav-links { display: flex; gap: 20px; }
+    .nav-links a {
+      font-size: 12px;
+      color: #505070;
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.3px;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: #19FB9B; }
+
+    .container {
+      max-width: 760px;
+      margin: 48px auto 0;
+    }
+
+    .page-title {
+      font-size: 32px;
+      font-weight: 800;
+      color: #f0f0ff;
+      margin-bottom: 8px;
+    }
+
+    .last-updated {
+      font-size: 12px;
+      color: #505070;
+      margin-bottom: 40px;
+      letter-spacing: 0.3px;
+    }
+
+    .alert-box {
+      background: #14141e;
+      border: 1px solid rgba(251,191,36,0.3);
+      border-left: 3px solid #fbbf24;
+      border-radius: 10px;
+      padding: 18px 20px;
+      margin-bottom: 36px;
+    }
+
+    .alert-box p {
+      color: #f0f0ff;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .risk-card {
+      background: #14141e;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+    }
+
+    .risk-card-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .risk-icon { font-size: 20px; }
+
+    .risk-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: #f0f0ff;
+    }
+
+    .risk-card p { margin-bottom: 10px; font-size: 14px; }
+    .risk-card p:last-child { margin-bottom: 0; }
+
+    .risk-card ul {
+      margin: 8px 0 10px 18px;
+      font-size: 14px;
+    }
+
+    .risk-card li { margin-bottom: 5px; }
+
+    h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f0f0ff;
+      margin: 40px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    p { margin-bottom: 14px; color: #c0c0e0; }
+
+    ul {
+      margin: 10px 0 16px 20px;
+      color: #c0c0e0;
+    }
+
+    li { margin-bottom: 6px; }
+
+    .scam-box {
+      background: #14141e;
+      border: 1px solid rgba(255,51,85,0.3);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin: 16px 0;
+    }
+
+    .scam-box h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: #ff3355;
+      margin-bottom: 12px;
+    }
+
+    .scam-box ul {
+      margin-left: 18px;
+      font-size: 14px;
+    }
+
+    .ack-box {
+      background: #14141e;
+      border: 1px solid rgba(25,251,155,0.2);
+      border-radius: 12px;
+      padding: 20px 22px;
+      margin: 24px 0 16px;
+    }
+
+    .ack-box p {
+      font-size: 14px;
+      color: #f0f0ff;
+      font-weight: 600;
+    }
+
+    .ack-box ul {
+      margin: 10px 0 0 18px;
+      font-size: 14px;
+      color: #c0c0e0;
+    }
+
+    .contact-box {
+      background: #14141e;
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-top: 16px;
+    }
+
+    .contact-box p { margin: 4px 0; font-size: 14px; }
+    .contact-box a { color: #19FB9B; text-decoration: none; }
+
+    strong.white { color: #f0f0ff; }
+    strong.red { color: #ff3355; }
+
+    .footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+      text-align: center;
+    }
+
+    .footer p { font-size: 12px; color: #505070; }
+    .footer a { color: #505070; text-decoration: none; margin: 0 10px; }
+    .footer a:hover { color: #19FB9B; }
+
+    @media (max-width: 600px) {
+      .nav-links { display: none; }
+      .page-title { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <a class="logo" href="https://trappwallet.io">Trapp<span>Wallet</span></a>
+    <nav class="nav-links">
+      <a href="privacy-policy.html">Privacy</a>
+      <a href="terms-of-service.html">Terms</a>
+      <a href="risk-disclosure.html">Risk Disclosure</a>
+    </nav>
+  </div>
+
+  <div class="container">
+
+    <h1 class="page-title">Risk Disclosure</h1>
+    <p class="last-updated">Last Updated: May 30, 2026</p>
+
+    <div class="alert-box">
+      <p>&#x26A0;&#xFE0F; Please read this document carefully before using TrappWallet. Cryptocurrency involves unique and substantial risks. This is not a complete list of all risks.</p>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x1F4C9;</span>
+        <span class="risk-title">1. Cryptocurrency Is Highly Volatile</span>
+      </div>
+      <p>The value of Solana (SOL), SPL tokens, and all other cryptocurrencies can change dramatically in very short periods of time. You may lose some or all of the value of your holdings at any time. Past performance is not indicative of future results.</p>
+      <p><strong class="red">Do not invest money you cannot afford to lose entirely.</strong></p>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x1F511;</span>
+        <span class="risk-title">2. Loss of Seed Phrase Means Permanent Loss of Funds</span>
+      </div>
+      <p>TrappWallet is non-custodial. If you lose your seed phrase (secret recovery phrase):</p>
+      <ul>
+        <li>Your funds are <strong class="red">permanently and irrecoverably lost</strong></li>
+        <li>No company, developer, or authority can restore your access</li>
+        <li>There is no customer support that can recover a lost seed phrase</li>
+        <li>This is a fundamental property of blockchain technology</li>
+      </ul>
+      <p><strong class="white">Protect your seed phrase. Write it down. Store it offline. Never share it with anyone — including anyone claiming to be TrappWallet support.</strong></p>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x1F680;</span>
+        <span class="risk-title">3. New Token Risks (pump.fun / Meme Tokens)</span>
+      </div>
+      <p>Tokens launched on pump.fun and similar platforms carry extreme risk:</p>
+      <ul>
+        <li>Most new tokens lose the majority of their value within hours or days</li>
+        <li>Many are created with intent to defraud buyers ("rug pulls")</li>
+        <li>Dev wallets may dump tokens immediately after launch</li>
+        <li>Coordinated wallet groups ("bundlers") may manipulate early price action</li>
+        <li>Smart contract exploits can drain liquidity instantly</li>
+        <li>Security scan results may be incomplete for brand new tokens</li>
+        <li>Our sniper and trading tools do not reduce these risks — they only increase execution speed</li>
+      </ul>
+      <p><strong class="red">Assume any new token could go to zero. Only use funds you can afford to lose entirely.</strong></p>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x26A1;</span>
+        <span class="risk-title">4. Take-Profit and Stop-Loss Order Risks</span>
+      </div>
+      <p>Jupiter Trigger orders (TP/SL) are on-chain conditional orders. You acknowledge:</p>
+      <ul>
+        <li>Execution is not guaranteed — orders depend on on-chain liquidity and third-party keepers</li>
+        <li>Slippage may result in fills at prices different from your target</li>
+        <li>Orders may not execute during extreme market volatility or low liquidity</li>
+        <li>Network congestion may delay or prevent execution</li>
+        <li>Once submitted on-chain, orders may incur fees regardless of whether they execute</li>
+        <li>TrappWallet has no control over Jupiter's infrastructure or order fulfillment</li>
+      </ul>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x1F4DC;</span>
+        <span class="risk-title">5. Smart Contract Risk</span>
+      </div>
+      <p>All DeFi interactions (swaps, trigger orders, liquidity) involve smart contracts. Smart contracts may contain undiscovered bugs, logic errors, or exploitable vulnerabilities that result in partial or total loss of funds.</p>
+      <p>No smart contract audit guarantees safety. Interacting with any smart contract carries inherent risk.</p>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x1F6E1;&#xFE0F;</span>
+        <span class="risk-title">6. Security Scan Limitations</span>
+      </div>
+      <p>TrappWallet provides token security information powered by RugCheck and GoPlus. You acknowledge:</p>
+      <ul>
+        <li>Security scans are informational only and do not guarantee a token is safe</li>
+        <li>Scans may be incomplete, delayed, or inaccurate for new tokens</li>
+        <li>A "LOW RISK" score does not mean a token is a good investment or free from fraud</li>
+        <li>Bad actors continuously evolve tactics to evade detection tools</li>
+        <li>Always conduct your own research beyond any automated scan result</li>
+      </ul>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x1F4F6;</span>
+        <span class="risk-title">7. Network and Technology Risks</span>
+      </div>
+      <ul>
+        <li>The Solana network may experience outages, congestion, or degraded performance</li>
+        <li>Transactions may fail, be delayed, or be dropped by the network</li>
+        <li>RPC providers may be unavailable or return inaccurate data</li>
+        <li>Software bugs in TrappWallet may cause unexpected behavior</li>
+        <li>Device loss, theft, or failure may affect access to your wallet</li>
+      </ul>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x2696;&#xFE0F;</span>
+        <span class="risk-title">8. Regulatory Risk</span>
+      </div>
+      <p>Cryptocurrency regulation is evolving rapidly. Laws and regulations in your jurisdiction may restrict or prohibit cryptocurrency use, require transaction reporting, or change without notice. You are solely responsible for complying with all laws applicable to you.</p>
+    </div>
+
+    <div class="risk-card">
+      <div class="risk-card-header">
+        <span class="risk-icon">&#x1F3E6;</span>
+        <span class="risk-title">9. No Insurance</span>
+      </div>
+      <p>Cryptocurrency held in TrappWallet is <strong class="white">not insured</strong> by any government agency, deposit insurance program, or third party. There is no equivalent of FDIC or SIPC insurance for cryptocurrency.</p>
+    </div>
+
+    <div class="scam-box">
+      <h3>&#x1F6A8; Scam Awareness</h3>
+      <ul>
+        <li><strong class="white">TrappWallet will never ask for your seed phrase</strong> — not in the app, not via email, not via social media, not via any support channel</li>
+        <li>Be wary of fake websites, fake support accounts, and phishing attempts impersonating TrappWallet</li>
+        <li>Never share your seed phrase with anyone for any reason</li>
+        <li>NFTs sent to your wallet unsolicited should be treated as potential scams — do not interact with any links they contain</li>
+        <li>Verify you are always using the official app from the official App Store listing</li>
+      </ul>
+    </div>
+
+    <h2>Your Acknowledgment</h2>
+    <div class="ack-box">
+      <p>By using TrappWallet, you acknowledge that:</p>
+      <ul>
+        <li>You have read and understand all risks described in this document</li>
+        <li>You are using the App entirely at your own risk</li>
+        <li>TrappWallet is not liable for any losses you incur</li>
+        <li>You are not relying on TrappWallet for financial, investment, or legal advice</li>
+        <li>You are legally permitted to use cryptocurrency in your jurisdiction</li>
+      </ul>
+    </div>
+
+    <h2>Contact</h2>
+    <div class="contact-box">
+      <p>&#x1F4E7; <a href="mailto:support@trappwallet.io">support@trappwallet.io</a></p>
+      <p>&#x1F310; <a href="https://trappwallet.io" target="_blank">trappwallet.io</a></p>
+    </div>
+
+    <div class="footer">
+      <p>
+        <a href="privacy-policy.html">Privacy Policy</a>
+        <a href="terms-of-service.html">Terms of Service</a>
+        <a href="risk-disclosure.html">Risk Disclosure</a>
+      </p>
+      <p style="margin-top:12px">&copy; 2026 TrappWallet. All rights reserved.</p>
+    </div>
+
+  </div>
+</body>
+</html>

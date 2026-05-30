@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TrappWallet — Solana Mobile Wallet</title>
+  <meta name="description" content="TrappWallet is a non-custodial Solana mobile wallet with a built-in pump.fun sniper, on-chain TP/SL orders, security scanner, and NFT spam filter." />
+  <meta property="og:title" content="TrappWallet — Solana Mobile Wallet" />
+  <meta property="og:description" content="Pump sniper. On-chain TP/SL. Security scanner. NFT spam filter. All in one mobile app." />
+  <meta property="og:url" content="https://trappwallet.io" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg0: #0b0b0f;
+      --bg1: #0f0f16;
+      --bg2: #14141e;
+      --bg3: #1a1a28;
+      --border: rgba(255,255,255,0.07);
+      --border2: rgba(255,255,255,0.12);
+      --text1: #f0f0ff;
+      --text2: #c0c0e0;
+      --text3: #8080a8;
+      --text4: #505070;
+      --green: #19FB9B;
+      --purple: #9945FF;
+      --red: #ff3355;
+      --yellow: #fbbf24;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg0);
+      color: var(--text2);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      background: rgba(11,11,15,0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 0 24px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-logo {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text1);
+      text-decoration: none;
+      letter-spacing: 0.3px;
+    }
+
+    .nav-logo span { color: var(--green); }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text3);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--green); }
+
+    .nav-cta {
+      background: var(--green);
+      color: #000 !important;
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-weight: 700 !important;
+      font-size: 13px !important;
+      transition: opacity 0.2s !important;
+    }
+
+    .nav-cta:hover { opacity: 0.85; color: #000 !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 100px 24px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 800px;
+      background: radial-gradient(ellipse at center, rgba(153,69,255,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -100px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, rgba(25,251,155,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .beta-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(25,251,155,0.1);
+      border: 1px solid rgba(25,251,155,0.25);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--green);
+      letter-spacing: 0.5px;
+      margin-bottom: 28px;
+      text-transform: uppercase;
+    }
+
+    .beta-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 7vw, 80px);
+      font-weight: 900;
+      color: var(--text1);
+      line-height: 1.05;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 .green { color: var(--green); }
+
+    .hero p {
+      font-size: clamp(16px, 2.5vw, 20px);
+      color: var(--text3);
+      max-width: 560px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 64px;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #000;
+      font-weight: 800;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary:hover { opacity: 0.85; transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text1);
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 32px;
+      border-radius: 12px;
+      text-decoration: none;
+      border: 1px solid var(--border2);
+      transition: border-color 0.2s, transform 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-secondary:hover { border-color: var(--green); transform: translateY(-1px); }
+
+    .hero-stats {
+      display: flex;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .stat { text-align: center; }
+    .stat-value { font-size: 28px; font-weight: 900; color: var(--text1); }
+    .stat-label { font-size: 12px; color: var(--text4); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 600; }
+
+    /* ── FEATURES ── */
+    .section {
+      padding: 100px 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--green);
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 900;
+      color: var(--text1);
+      text-align: center;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .section-sub {
+      font-size: 16px;
+      color: var(--text3);
+      text-align: center;
+      max-width: 500px;
+      margin: 0 auto 64px;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .feature-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 26px;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .feature-card:hover {
+      border-color: rgba(25,251,155,0.2);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 32px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-title {
+      font-size: 17px;
+      font-weight: 800;
+      color: var(--text1);
+      margin-bottom: 8px;
+    }
+
+    .feature-desc {
+      font-size: 14px;
+      color: var(--text3);
+      line-height: 1.65;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .how-section {
+      background: var(--bg1);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 100px 24px;
+    }
+
+    .how-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 32px;
+      margin-top: 64px;
+    }
+
+    .step {
+      text-align: center;
+    }
+
+    .step-num {
+      width: 48px;
+      height: 48px;
+      border-radius: 24px;
+      background: rgba(25,251,155,0.1);
+      border: 1px solid rgba(25,251,155,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--green);
+      margin: 0 auto 16px;
+    }
+
+    .step-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text1);
+      margin-bottom: 8px;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: var(--text3);
+      line-height: 1.6;
+    }
+
+    /* ── TRUST ── */
+    .trust-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .trust-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 20px;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+    }
+
+    .trust-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
+
+    .trust-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text1);
+      margin-bottom: 4px;
+    }
+
+    .trust-desc { font-size: 13px; color: var(--text3); line-height: 1.5; }
+
+    /* ── CTA BANNER ── */
+    .cta-section {
+      padding: 100px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 700px;
+      height: 400px;
+      background: radial-gradient(ellipse at center, rgba(153,69,255,0.1) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .cta-inner {
+      position: relative;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .cta-inner h2 {
+      font-size: clamp(28px, 4vw, 44px);
+      font-weight: 900;
+      color: var(--text1);
+      margin-bottom: 16px;
+      line-height: 1.15;
+    }
+
+    .cta-inner p {
+      font-size: 16px;
+      color: var(--text3);
+      margin-bottom: 36px;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--bg1);
+      border-top: 1px solid var(--border);
+      padding: 40px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-logo {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--text1);
+      text-decoration: none;
+    }
+
+    .footer-logo span { color: var(--green); }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--text4);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--green); }
+
+    .footer-copy {
+      font-size: 12px;
+      color: var(--text4);
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      .nav-links .hide-mobile { display: none; }
+      .hero-stats { gap: 24px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a class="nav-logo" href="/">Trapp<span>Wallet</span></a>
+    <div class="nav-links">
+      <a href="#features" class="hide-mobile">Features</a>
+      <a href="#security" class="hide-mobile">Security</a>
+      <a href="legal/index.html" class="hide-mobile">Legal</a>
+      <a href="#download" class="nav-cta">Download ↓</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="beta-badge">
+      <span class="beta-dot"></span>
+      Coming Soon
+    </div>
+
+    <h1>The Solana Wallet<br><span class="green">Built Different</span></h1>
+
+    <p>Non-custodial. Mobile-first. Built for people who actually use Solana daily — not just to hold SOL.</p>
+
+    <div class="hero-buttons">
+      <a href="#download" class="btn-primary">📱 Get Early Access</a>
+      <a href="#features" class="btn-secondary">See Features →</a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-value">🔒</div>
+        <div class="stat-label">Non-Custodial</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">⚡</div>
+        <div class="stat-label">Solana Native</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">🎯</div>
+        <div class="stat-label">Sniper Built In</div>
+      </div>
+      <div class="stat">
+        <div class="stat-value">🛡</div>
+        <div class="stat-label">Auto Scan</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <p class="section-label">Features</p>
+    <h2 class="section-title">Everything in one app</h2>
+    <p class="section-sub">No more jumping between tabs. TrappWallet does it all from your pocket.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <span class="feature-icon">🎯</span>
+        <div class="feature-title">pump.fun Sniper</div>
+        <div class="feature-desc">Stream every new pump.fun launch live. Filter by liquidity and dev buy size. Snipe in one tap — or set auto-snipe and let it fire itself.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">⚡</span>
+        <div class="feature-title">On-Chain TP / SL</div>
+        <div class="feature-desc">Set take-profit and stop-loss orders directly on-chain via Jupiter Trigger. Executes automatically when your price target hits — no babysitting required.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🛡</span>
+        <div class="feature-title">Auto Security Scanner</div>
+        <div class="feature-desc">Every token auto-scanned the second you open it. RugCheck score, honeypot detection, freeze/mint authority flags, LP lock status, and live dev wallet check.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🖼</span>
+        <div class="feature-title">NFT Spam Filter</div>
+        <div class="feature-desc">Fake winner tickets and scam NFTs are automatically quarantined before they reach your gallery. Your real collection stays clean.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">🫧</span>
+        <div class="feature-title">Live Bubble Charts</div>
+        <div class="feature-desc">Inline holder bubble maps for every token — dev, insiders, bundlers, and top holders visualized instantly without leaving the app.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">⇄</span>
+        <div class="feature-title">Jupiter Swap</div>
+        <div class="feature-desc">Best-route token swaps via Jupiter Aggregator with priority fee control — Normal, Fast, or Turbo — and real-time price impact warnings.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">📊</span>
+        <div class="feature-title">Portfolio Tracking</div>
+        <div class="feature-desc">Live token balances, 24h price changes, full transaction history, and total USD value — all updating in real time.</div>
+      </div>
+
+      <div class="feature-card">
+        <span class="feature-icon">📈</span>
+        <div class="feature-title">Tax Export</div>
+        <div class="feature-desc">Export your full Solana transaction history as a CSV for tax reporting. Full history, all token transfers, ready for your accountant.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="how-section">
+    <div class="how-inner">
+      <p class="section-label">How It Works</p>
+      <h2 class="section-title">Up and running in minutes</h2>
+      <p class="section-sub" style="margin-bottom:0">No accounts. No email. No KYC. Just your wallet.</p>
+
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-title">Download the App</div>
+          <div class="step-desc">Available on iOS and Android. Free to download, no account required.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-title">Create Your Wallet</div>
+          <div class="step-desc">A new Solana wallet is generated on your device. Write down your seed phrase and keep it safe.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-title">Set Your PIN</div>
+          <div class="step-desc">Protect your wallet with a PIN and optional Face ID or fingerprint unlock.</div>
+        </div>
+        <div class="step">
+          <div class="step-num">4</div>
+          <div class="step-title">Start Trading</div>
+          <div class="step-desc">Deposit SOL, explore pump.fun, set snipers and TP/SL — everything is right there.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SECURITY / TRUST -->
+  <section class="section" id="security">
+    <p class="section-label">Security</p>
+    <h2 class="section-title">Your keys. Your crypto.</h2>
+    <p class="section-sub">TrappWallet never touches your funds. Ever.</p>
+
+    <div class="trust-grid">
+      <div class="trust-card">
+        <span class="trust-icon">🔒</span>
+        <div>
+          <div class="trust-title">Non-Custodial</div>
+          <div class="trust-desc">Your seed phrase is generated and stored on your device only. We have zero access to your funds.</div>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <span class="trust-icon">🧬</span>
+        <div>
+          <div class="trust-title">Biometric Lock</div>
+          <div class="trust-desc">Face ID and fingerprint unlock supported. Your wallet locks automatically when the app goes to background.</div>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <span class="trust-icon">📋</span>
+        <div>
+          <div class="trust-title">Clipboard Auto-Wipe</div>
+          <div class="trust-desc">Copied wallet addresses are automatically wiped from your clipboard after 60 seconds.</div>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <span class="trust-icon">👁</span>
+        <div>
+          <div class="trust-title">Privacy Overlay</div>
+          <div class="trust-desc">Your balances are hidden in the app switcher so no one can shoulder-surf your portfolio.</div>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <span class="trust-icon">🛡</span>
+        <div>
+          <div class="trust-title">Token Scanner</div>
+          <div class="trust-desc">Every token auto-scanned via RugCheck and GoPlus before you commit to a trade.</div>
+        </div>
+      </div>
+
+      <div class="trust-card">
+        <span class="trust-icon">🚫</span>
+        <div>
+          <div class="trust-title">NFT Quarantine</div>
+          <div class="trust-desc">Spam and phishing NFTs are automatically detected and quarantined — never shown in your main gallery.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="download">
+    <div class="cta-inner">
+      <h2>Ready to trade<br>on your terms?</h2>
+      <p>TrappWallet is dropping soon on iOS and Android. Follow us on X for the launch.</p>
+      <div style="display:flex; gap:14px; justify-content:center; flex-wrap:wrap;">
+        <a href="https://x.com/trappwallet" class="btn-primary" target="_blank">𝕏 Follow for Updates</a>
+        <a href="mailto:support@trappwallet.io" class="btn-secondary">✉ Contact Us</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <a class="footer-logo" href="/">Trapp<span>Wallet</span></a>
+
+      <div class="footer-links">
+        <a href="legal/privacy-policy.html">Privacy Policy</a>
+        <a href="legal/terms-of-service.html">Terms of Service</a>
+        <a href="legal/risk-disclosure.html">Risk Disclosure</a>
+        <a href="mailto:support@trappwallet.io">Support</a>
+        <a href="https://x.com/trappwallet" target="_blank">X / Twitter</a>
+      </div>
+
+      <p class="footer-copy">&copy; 2026 TrappWallet. All rights reserved.</p>
+    </div>
+  </footer>
+
+</body>
+</html>
